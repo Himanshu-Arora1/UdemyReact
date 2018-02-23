@@ -1,45 +1,60 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
+import Charts from '../components/charts';
+
 
 class WeatherList extends Component {
 
-	renderWeather(cityData){
+	renderWeather(CityData){
 
-		console.log('Render Weather');
+		const name = CityData.city.name;
+		const id = 	 CityData.city.id;
+		const temps = CityData.list.map(weather => weather.main.temp) ; // array of temps
+		const Pressures = CityData.list.map(weather => weather.main.pressure) ; // array of Pressure
+		const Humidities = CityData.list.map(weather => weather.main.humidity) ; // array of Humidity
+		const {lon,lat} = CityData.city.coord;
+		console.log(temps);
 
-		console.log('name',citydata.city.name);
-
-		return(
-					<tr>
+			return(
+					<tr key={id}>
 						<td>
-							{cityData.city.name}
+							{name}
+						</td>
+						<td>
+							<Charts data={temps} color='red' Units='K'/>
+						</td>
+						<td>
+							<Charts data={Pressures} color='Green' Units='HPA'/>
+						</td>
+						<td>
+							<Charts data={Humidities} color='orange' Units='%' />
 						</td>
 					</tr>
-			)
-	} 
+				)
+				}  
 
-	render(){
-	console.log('render ');
-		return(
-				<table className='table table-hover'>
-					<thead>
-						<tr>
-							<th>City</th>
-							<th>Temparature</th>
-							<th>Pressure</th>
-							<th>Humidity</th>
-						</tr>
-					</thead>
-					<tbody>
-						{this.props.weather.map(this.renderWeather)}
-					</tbody>
-				</table>
+		render(){
+					console.log('render of weather list');
+						return(
+							<table className='table table-hover'>
+								<thead>
+									<tr>
+										<th>City</th>
+										<th>Temparature(K)</th>
+										<th>Pressure(HPA)</th>
+										<th>Humidity(%)</th>
+									</tr>
+								</thead>
+								<tbody>
+									{this.props.weather.map(this.renderWeather)}
+								</tbody>
+							</table>
 			)
 	}
 }
 
 function mapStateToProps(state){
-
+		console.log('map state');
 		return {weather:state.weather};
 }
 
